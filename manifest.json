@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "KI Email Assistant via N8N",
+  "version": "1.0.0",
+  "description": "Automatische E-Mail-Beantwortung mit N8N Integration - sendet E-Mails an eine N8N-API und fügt die generierte Antwort ein",
+  "author": "Digitmedia e.K.",
+  "applications": {
+    "gecko": {
+      "id": "support@digitmedia.de",
+      "strict_min_version": "115.0"
+    }
+  },
+  "permissions": [
+    "compose",
+    "storage",
+    "messagesModify"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "compose_action": {
+    "default_label": "KI Antwort",
+    "default_title": "Automatische Antwort via N8N generieren"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "browser_style": true
+  }
+}
