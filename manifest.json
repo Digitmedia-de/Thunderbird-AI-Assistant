@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Email AI Assistant",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Enhance your email workflow with AI-powered responses. This add-on connects to an AI service to automatically generate email replies.",
   "author": "Digitmedia e.K.",
   "icons": {
