@@ -1,57 +1,83 @@
-# Thunderbird-N8N-Responder
+# Email AI Assistant Add-on
 
-Ein Thunderbird-Add-on zur automatischen E-Mail-Beantwortung mittels N8N-Integration.
+A Thunderbird add-on for automatic email responses using AI API integration.
 
 ## Features
 
-- Sendet E-Mail-Inhalte an eine konfigurierbare N8N-API
-- Empfängt automatisch generierte Antworten
-- Fügt die Antwort direkt in die E-Mail-Komposition ein
-- Unterstützt HTML und Plain-Text E-Mails
-- Sichere API-Authentifizierung via Bearer Token
+- Sends email content to a configurable REST API
+- Receives automatically generated responses
+- Inserts the response directly into the email composition
+- Supports HTML and plain-text emails
+- Secure API authentication via Bearer Token
 
 ## Installation
 
-1. Laden Sie die neueste Version des Add-ons herunter
-2. Öffnen Sie Thunderbird
-3. Gehen Sie zu: Menü → Add-ons und Themes
-4. Klicken Sie auf das Zahnrad-Symbol und wählen "Add-on aus Datei installieren..."
-5. Wählen Sie die heruntergeladene .xpi Datei aus
+1. Download the latest version of the add-on
+2. Open Thunderbird
+3. Go to: Menu → Add-ons and Themes
+4. Click on the gear icon and select "Install Add-on From File..."
+5. Select the downloaded .xpi file
 
-## Konfiguration
+## Configuration
 
-Nach der Installation müssen Sie folgende Einstellungen vornehmen:
+After installation, you need to configure the following settings:
 
-1. Öffnen Sie die Add-on-Einstellungen
-2. Konfigurieren Sie:
-   - **API URL**: Die vollständige URL Ihres N8N-Endpoints
-   - **API Key**: Ihr API-Schlüssel für die Authentifizierung
+1. Open the add-on settings
+2. Configure:
+   - **API URL**: The complete URL of the API endpoint
+   - **API Key**: Your API key for authentication
 
-## Verwendung
+## Usage
 
-1. Öffnen Sie eine neue E-Mail oder antworten Sie auf eine bestehende
-2. Klicken Sie auf den "N8N Email Assistant" Button in der Compose-Toolbar
-3. Die API-Antwort wird automatisch am Anfang Ihrer E-Mail eingefügt
+1. Open a new email or reply to an existing one
+2. Click the "AI Reply" button in the compose toolbar
+3. The API response will be automatically inserted at the beginning of your email
 
-## Fehlerbehandlung
+## API Request Format
 
-- Bei fehlender Konfiguration erscheint eine Benachrichtigung
-- API-Fehler werden in der Browser-Konsole protokolliert
-- Bei ungültigem API-Key erscheint ein Popup-Fenster
+The add-on sends requests to the API in the following format:
 
-## Technische Anforderungen
+```json
+{
+  "body": {
+    "subject": "Email Subject",
+    "body": "Email content in HTML or plain-text format"
+  }
+}
+```
 
-- Thunderbird Version 115.0 oder höher
-- Aktive N8N-Installation mit konfiguriertem Workflow
-- Gültige API-Zugangsdaten
+## API Response Format
 
-## Entwicklung
+The API responds in the following format:
 
-Das Add-on basiert auf der WebExtension-API von Thunderbird und verwendet:
-- JavaScript für die Hauptlogik
-- HTML/CSS für die Benutzeroberfläche
-- Fetch API für HTTP-Requests
+```json
+{
+  "code": 200,
+  "message": "The generated response appears here"
+}
+```
 
-## Lizenz
+The response is automatically extracted from the `message` field and inserted into the email.
 
-Entwickelt von Digitmedia e.K.
+## Error Handling
+
+- Missing configuration triggers a notification
+- API errors are logged in the browser console
+- Invalid API key triggers a popup window
+
+## Technical Requirements
+
+- Thunderbird version 115.0 or higher
+- Access to a compatible API endpoint
+- Valid API credentials
+
+## Development
+
+The add-on is based on Thunderbird's WebExtension API and uses:
+- JavaScript for core logic
+- HTML/CSS for user interface
+- Fetch API for HTTP requests
+
+## License
+
+Developed by Digitmedia e.K.
