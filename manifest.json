@@ -1,9 +1,15 @@
 {
   "manifest_version": 2,
   "name": "Email AI Assistant",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Enhance your email workflow with AI-powered responses. This add-on connects to an AI service to automatically generate email replies.",
   "author": "Digitmedia e.K.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "64": "icons/icon-64.png"
+  },
   "applications": {
     "gecko": {
       "id": "support@digitmedia.de",
@@ -20,7 +26,8 @@
   },
   "compose_action": {
     "default_label": "AI Reply",
-    "default_title": "Generate AI Response"
+    "default_title": "Generate AI Response",
+    "default_icon": "icons/icon-32.png"
   },
   "options_ui": {
     "page": "options/options.html",
