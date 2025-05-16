@@ -12,11 +12,27 @@ A Thunderbird add-on for automatic email responses using AI API integration.
 
 ## Installation
 
-1. Download the latest version of the add-on
+### Installation from the Thunderbird Add-on Store
+
+1. Visit the add-on page at: [https://addons.thunderbird.net/de/thunderbird/addon/ai-email-assistant/](https://addons.thunderbird.net/de/thunderbird/addon/ai-email-assistant/)
+2. Click on "Add to Thunderbird"
+3. Follow the installation instructions
+
+### Installation from File
+
+1. Download the latest version of the add-on (.xpi file)
 2. Open Thunderbird
 3. Go to: Menu → Add-ons and Themes
 4. Click on the gear icon and select "Install Add-on From File..."
 5. Select the downloaded .xpi file
+
+### Installation from Folder (for Developers)
+
+1. Clone or download the repository
+2. Open Thunderbird
+3. Go to: Menu → Add-ons and Themes
+4. Click on the gear icon and select "Debug Add-ons..."
+5. Click "Load Temporary Add-on..." and select the `manifest.json` file from the project folder
 
 ## Configuration
 
@@ -26,6 +42,17 @@ After installation, you need to configure the following settings:
 2. Configure:
    - **API URL**: The complete URL of the API endpoint
    - **API Key**: Your API key for authentication
+
+## Important Note on API Integration
+
+**Please note:** This add-on requires a custom API endpoint that processes email content and returns AI-generated responses. Direct API endpoints from OpenAI, Anthropic Claude, or Google Gemini **cannot be used directly** with this add-on.
+
+You will need to develop or deploy an intermediary API service that:
+1. Receives the email content from this add-on
+2. Processes it through your preferred AI service
+3. Returns the response in the expected format
+
+For non-developers, NoCode solutions like [n8n](https://n8n.io/) offer an excellent way to build this integration without coding experience. n8n allows you to create workflows that connect this add-on to various AI services through their APIs.
 
 ## Usage
 
@@ -45,6 +72,16 @@ The add-on sends requests to the API in the following format:
   }
 }
 ```
+
+### API Authentication
+
+The API Key is sent in the HTTP request header as a Bearer token:
+
+```
+Authorization: Bearer your-api-key-here
+```
+
+This ensures that your API credentials are securely transmitted with each request while keeping them separate from the request body.
 
 ## API Response Format
 
