@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
+    <link rel="stylesheet" href="notification-base.css">
+    <link rel="stylesheet" href="notification-success.css">
+</head>
+<body>
+    <div class="notification-container success">
+        <button class="close-button" aria-label="Close" onclick="window.close()"></button>
+        <div class="notification-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+        </div>
+        <h2 class="notification-title" id="successTitle">Success</h2>
+        <p class="notification-message" id="successMessage">Operation completed successfully</p>
+    </div>
+    <script src="notification.js"></script>
+</body>
+</html>

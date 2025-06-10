@@ -66,10 +66,11 @@ The add-on sends requests to the API in the following format:
 
 ```json
 {
-  "body": {
-    "subject": "Email Subject",
-    "body": "Email content in HTML or plain-text format"
-  }
+  "subject": "Email Subject",
+  "body": "Email content in HTML format",
+  "plainText": "Email content in plain-text format",
+  "from": "sender@example.com",  // The local email account being used
+  "to": ["recipient1@example.com", "recipient2@example.com"]  // The recipient(s) of the email
 }
 ```
 
@@ -114,6 +115,16 @@ The add-on is based on Thunderbird's WebExtension API and uses:
 - JavaScript for core logic
 - HTML/CSS for user interface
 - Fetch API for HTTP requests
+
+## Changelog
+
+### Version 0.1.4
+- Extended API request: Sender (`from`) and recipient (`to`) information are now included in the API request
+- Success notification: A confirmation popup "Settings saved" now appears after saving settings
+- Localization: All user interface texts have been translated from German to English
+
+### Version 0.1.2
+- Initial release
 
 ## License
 

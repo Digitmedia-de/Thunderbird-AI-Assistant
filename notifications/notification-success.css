@@ -1,0 +1,13 @@
+/* Success-specific styles (extends notification-base.css) */
+.notification-container.success {
+    border: 1px solid #c3e6cb;
+}
+
+.notification-container.success .notification-title {
+    color: #155724;
+}
+
+.notification-container.success .notification-message {
+    color: #155724;
+    opacity: 0.9;
+}
