@@ -18,7 +18,20 @@ function calculatePopupSize(message, title = '') {
   return { width: baseWidth, height: estimatedHeight };
 }
 
-browser.composeAction.onClicked.addListener(async (tab) => {
+// Debug: Log when background script loads
+console.log('Background script loaded at', new Date().toISOString());
+
+// Check if messenger API is available
+if (typeof messenger === 'undefined') {
+  console.error('Messenger API not available!');
+} else {
+  console.log('Messenger API available');
+}
+
+// Register compose action listener
+if (messenger.composeAction && messenger.composeAction.onClicked) {
+  messenger.composeAction.onClicked.addListener(async (tab) => {
+    console.log('AI Reply button clicked', tab);
     try {
       const details = await messenger.compose.getComposeDetails(tab.id);
       const storage = await browser.storage.local.get(['apiUrl', 'apiKey']);
@@ -136,32 +149,47 @@ browser.composeAction.onClicked.addListener(async (tab) => {
         const responseData = await response.json();
         console.log('API Response:', responseData);
 
-        if (responseData.code === 200) {
+        if (responseData.code === 200 && responseData.message) {
           const message = responseData.message;
-          const currentDetails = await messenger.compose.getComposeDetails(tab.id);
+          console.log('Message to insert:', message);
           
-          // Determine composition mode and append message at the end
-          if (currentDetails.body && currentDetails.body.trim() !== "") {
-            // Find the position after <body> tag to insert the message at the start
-            const bodyContent = currentDetails.body;
-            const bodyStart = bodyContent.indexOf('<body>') + 6;
-            
-            const newBody = 
-              bodyContent.substring(0, bodyStart) + 
-              `${message}<br><br>` +
-              bodyContent.substring(bodyStart);
-            
+          const currentDetails = await messenger.compose.getComposeDetails(tab.id);
+          console.log('Current compose details:', {
+            hasBody: !!currentDetails.body,
+            hasPlainText: !!currentDetails.plainTextBody,
+            isPlainText: currentDetails.isPlainText
+          });
+          
+          // Determine composition mode and append message
+          if (currentDetails.isPlainText) {
+            // Plain text email
+            const currentText = currentDetails.plainTextBody || "";
             await messenger.compose.setComposeDetails(tab.id, {
-              body: newBody
+              plainTextBody: `${message}\n\n${currentText}`
             });
-            console.log('HTML: message inserted at start');
-          } else if (currentDetails.plainTextBody && currentDetails.plainTextBody.trim() !== "") {
-            await messenger.compose.setComposeDetails(tab.id, {
-              plainTextBody: `${message}\n\n${currentDetails.plainTextBody}`
-            });
-            console.log('Plain text: message added at start');
+            console.log('Plain text: message added');
           } else {
-            console.log('Fallback: no valid content detected');
+            // HTML email
+            const currentBody = currentDetails.body || "";
+            
+            if (currentBody.includes('<body>')) {
+              // Insert after <body> tag
+              const bodyStart = currentBody.indexOf('<body>') + 6;
+              const newBody = 
+                currentBody.substring(0, bodyStart) + 
+                `${message}<br><br>` +
+                currentBody.substring(bodyStart);
+              
+              await messenger.compose.setComposeDetails(tab.id, {
+                body: newBody
+              });
+            } else {
+              // No body tag, just prepend
+              await messenger.compose.setComposeDetails(tab.id, {
+                body: `${message}<br><br>${currentBody}`
+              });
+            }
+            console.log('HTML: message added');
           }
           
           // Show success notification
@@ -198,7 +226,34 @@ browser.composeAction.onClicked.addListener(async (tab) => {
           }, 3000);
           
         } else {
-          console.log('Invalid server response');
+          // Handle invalid response
+          console.error('Invalid server response:', responseData);
+          
+          let errorWindow = await messenger.windows.create({
+            type: "popup",
+            url: "/notifications/notification-error.html",
+            width: 320,
+            height: 200
+          });
+          
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          const tabs = await browser.tabs.query({windowId: errorWindow.id});
+          if (tabs && tabs.length > 0) {
+            try {
+              await browser.tabs.sendMessage(tabs[0].id, {
+                type: 'error',
+                title: 'Invalid Response',
+                message: 'The server returned an invalid response. Please check your API configuration.'
+              });
+            } catch (error) {
+              console.error('Failed to send error message:', error);
+            }
+          }
+          
+          setTimeout(() => {
+            messenger.windows.remove(errorWindow.id);
+          }, 5000);
         }
         
       } catch (error) {
@@ -211,4 +266,7 @@ browser.composeAction.onClicked.addListener(async (tab) => {
       console.error('Error:', error);
       console.log('Error:', error.message);
     }
-});
+  });
+} else {
+  console.error('composeAction.onClicked not available!');
+}

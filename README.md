@@ -118,9 +118,8 @@ The add-on is based on Thunderbird's WebExtension API and uses:
 
 ## Changelog
 
-### Version 0.1.4
+### Version 0.1.5
 - Extended API request: Sender (`from`) and recipient (`to`) information are now included in the API request
-- Success notification: A confirmation popup "Settings saved" now appears after saving settings
 - Localization: All user interface texts have been translated from German to English
 
 ### Version 0.1.2
